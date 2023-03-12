@@ -1,2 +1,2 @@
 # homelab-discord-embeds
-Various Discord Embeds for my Homelab
+Various scripts w Discord Embeds for my Homelab
