@@ -27,7 +27,7 @@ Various scripts I use to maintain my homelab. Sends notifications to Discord
 
 
 [plex-update.py](https://github.com/sicXnull/homelab-scripts/blob/main/plex-update.py) - checks current Plex version and updates if needed. Notifies when updated
-- change `webhook_url` `subdomain` & `base_domain` <br><br>
+- change `webhook_url` <br><br>
 
 ![image](https://user-images.githubusercontent.com/31908995/224579556-099df1b2-1ddc-4d04-82ae-6ae483808d05.png)
 
