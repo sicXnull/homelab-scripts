@@ -4,7 +4,7 @@ import requests
 import re
 import time
 import subprocess
-from datetime import datetime
+import datetime
 import pytz
 
 start_time = time.time()
@@ -47,10 +47,9 @@ if result.returncode == 0:
     duration_seconds = round(duration_seconds, 0)
 
     tz = pytz.timezone("America/New_York")
-    time_ny = datetime.now(tz).strftime("%I:%M %p")
-    date_ny = datetime.now(tz).strftime("%m/%d/%y")
+
     embed = {
-        'title': hostname,
+        'title': "hostname",
         "thumbnail": {
             "url": "https://i.imgur.com/dFqM7CG.png"
         },
@@ -62,7 +61,7 @@ if result.returncode == 0:
             },
             {
                 'name': 'Transfer',
-                'value': transferred,
+                'value': "transferred",
                 'inline': True
             },
             {
@@ -76,7 +75,7 @@ if result.returncode == 0:
             },
             {
                 'name': 'Date and Time',
-                'value': f'{date_ny} {time_ny} (New York/Eastern)',
+                'value': datetime.datetime.now(tz).strftime('%Y-%m-%d %I:%M %p %Z'),
             },
         ],
         'color': 12868102
@@ -91,5 +90,5 @@ else:
             'color': 15158332
         }
 
-# Send to discord
+# Send the message to discord
 requests.post(webhook_url, json={'embeds': [embed]})
