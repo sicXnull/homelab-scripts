@@ -21,7 +21,7 @@ Various scripts I use to maintain my homelab. Sends notifications to Discord
 
 
 [certbot-renewal.py](https://github.com/sicXnull/homelab-scripts/blob/main/certbot-renewal.py) - Checks expiration date of certificate. Notifies when renewed
-- change `webhook_url` `subdomain` & `base_domain` <br><br>
+- change `webhook_url` `subdomain` & `base_domain` (TO DO: Notify if cert expires, renew) <br><br>
 
 ![image](https://user-images.githubusercontent.com/31908995/224579506-46b69fc7-0ee5-4ea7-bcb1-a490c811fdde.png)
 
@@ -40,7 +40,7 @@ Various scripts I use to maintain my homelab. Sends notifications to Discord
 
 
 [snapraid.py](https://github.com/sicXnull/homelab-scripts/blob/main/snapraid/snapraid.py) - fork of [snapraid-runner](https://github.com/Chronial/snapraid-runner) 
-- change `webhook_url` in snapraid-runner.conf. otherwise follow same configuration.  (TODO: Add Metrics) <br><br>
+- change `webhook_url` in snapraid-runner.conf. otherwise follow same configuration.  (TO DO: Add Metrics) <br><br>
 
 ![image](https://user-images.githubusercontent.com/31908995/224580065-21eb2cae-8067-4849-8446-b513901969b5.png)
 
