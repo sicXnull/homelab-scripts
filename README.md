@@ -37,7 +37,10 @@ Various scripts I use to maintain my homelab. Sends notifications to Discord
 
 ![image](https://user-images.githubusercontent.com/31908995/224580012-31963672-0424-4aa6-89d0-e491540df247.png)
 
+[vaultwarden.py](https://github.com/sicXnull/homelab-scripts/blob/main/vaultwarden.py) - checks current Plex version and updates if needed. Notifies when updated
+- change `webhook_url` <br><br>
 
+![image](https://user-images.githubusercontent.com/31908995/236705386-efe51958-e6e3-474e-8e93-1b2c33bc81de.png)
 
 [snapraid.py](https://github.com/sicXnull/homelab-scripts/blob/main/snapraid/snapraid.py) - fork of [snapraid-runner](https://github.com/Chronial/snapraid-runner) 
 - change `webhook_url` in snapraid-runner.conf. otherwise follow same configuration.  (TO DO: Add Metrics) <br><br>
@@ -64,7 +67,10 @@ Add to crontab. Example:
 0 8 * * 0 python3 /opt/homelab-scripts/pfsense/pfbak.py
 ```
 
-
+- Vaultwarden Sundays @ 8:05am
+```
+5 8 * * 0 python3 /opt/homelab-scripts/pfsense/vaultwarden.py
+```
 - apt-upgrade Sundays @ 9am
 
 ```
