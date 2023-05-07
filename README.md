@@ -37,7 +37,7 @@ Various scripts I use to maintain my homelab. Sends notifications to Discord
 
 ![image](https://user-images.githubusercontent.com/31908995/224580012-31963672-0424-4aa6-89d0-e491540df247.png)
 
-[vaultwarden.py](https://github.com/sicXnull/homelab-scripts/blob/main/vaultwarden.py) - Modified version of an existing VaultWarden backup script. Added ability to save to samba share and send notifications
+[vaultwarden.py](https://github.com/sicXnull/homelab-scripts/blob/main/vaultwarden.py) - Modified version of an [existing VaultWarden backup script](https://github.com/isotopp/vaultwarden-backup). Added ability to save to samba share and send notifications
 - change `webhook_url` <br><br>
 
 ![image](https://user-images.githubusercontent.com/31908995/236705386-efe51958-e6e3-474e-8e93-1b2c33bc81de.png)
