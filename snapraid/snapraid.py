@@ -17,6 +17,9 @@ from io import StringIO
 # Global variables
 config = None
 email_log = None
+start_time = time.time()
+script_dir = os.path.dirname(os.path.abspath(__file__))
+log_file_path = os.path.join(script_dir, "snapraid.log")
 
 def tee_log(infile, out_lines, log_level):
     """
@@ -66,9 +69,14 @@ def snapraid_command(command, args={}, *, allow_statuscodes=[]):
     else:
         raise subprocess.CalledProcessError(ret, "snapraid " + command)
 
-def send_discord(success):
+
+def send_discord(success, exception_msg="", log_path=log_file_path, duration=0):
+    end_time = time.time()
+    duration = end_time - start_time  # This gives the duration in seconds
+
     import json
     import urllib.request
+    import re
     from datetime import datetime
     from pytz import timezone
 
@@ -76,29 +84,70 @@ def send_discord(success):
     est = timezone('EST')
     date_time = datetime.now(est)
 
+    # convert duration to appropriate format
+    def format_duration(seconds):
+        if seconds < 60:
+            return str(round(seconds, 2)) + " seconds"
+        elif seconds < 3600:
+            return str(round(seconds / 60, 2)) + " minutes"
+        else:
+            return str(round(seconds / 3600, 2)) + " hours"
+
     if success:
-        color = 0x00ff00
-        status = "Completed"
+        with open(log_path, 'r') as file:
+            lines = file.readlines()
+
+        for line in reversed(lines):
+            if 'Diff results' in line:
+                break
+
+        result_regex = r"Diff results: (\d+) added,  (\d+) removed,  (\d+) moved,  (\d+) modified"
+        result_match = re.search(result_regex, line)
+
+        if result_match is None:
+            print("Couldn't find diff results in log file")
+            return
+
+        color = 0x0080d7
+        fields = [
+            {"name": "Added", "value": result_match.group(1), "inline": True},
+            {"name": "Removed", "value": result_match.group(2), "inline": True},
+            {"name": "Modified", "value": result_match.group(4), "inline": True},
+            {
+                "name": "Duration",
+                "value": format_duration(duration),
+            },
+            {
+                "name": "Time",
+                "value": date_time.strftime("%m/%d/%Y, %H:%M:%S %Z"),
+            },
+        ]
     else:
         color = 0xff0000
         status = "Failed"
+        fields = [
+            {
+                "name": "SnapRAID Job",
+                "value": status,
+            },
+            {
+                "name": "Time",
+                "value": date_time.strftime("%m/%d/%Y, %H:%M:%S %Z"),
+            },
+            {
+                "name": "Exception message",
+                "value": f'```\n{exception_msg}\n```',
+            },
+        ]
 
     payload = {
         "embeds": [{
-            "title": 'SnapRAID',
+            "title": 'SnapRAID Sync Complete',
             "thumbnail": {
-                "url": "https://i.imgur.com/T5nSfU8.png"
+                "url": "https://i.imgur.com/lVM04iY.png"
             },
             "color": color,
-            "fields": [{
-                    "name": "SnapRAID Job",
-                    "value": status,
-                },
-                {
-                    "name": "Time",
-                    "value": date_time.strftime("%m/%d/%Y, %H:%M:%S %Z"),
-                },
-            ],
+            "fields": fields,
         }]
     }
 
@@ -115,8 +164,6 @@ def send_discord(success):
         res.read().decode('utf8')
     except Exception as e:
         print(e)
-
-
 
 def send_email(success):
     import smtplib
@@ -244,7 +291,7 @@ def setup_logger():
         file_logger = logging.handlers.RotatingFileHandler(
             config["logging"]["file"],
             maxBytes=max_log_size,
-            backupCount=3)
+            backupCount=9)
         file_logger.setFormatter(log_format)
         root_logger.addHandler(file_logger)
 
@@ -291,12 +338,17 @@ def main():
         print(traceback.format_exc())
         sys.exit(2)
 
-    try:
-        run()
-    except Exception:
-        logging.exception("Run failed due to unexpected exception:")
-        finish(False)
+    while True:
+        try:
+            run()
+            break  # if the run succeeds, break out of the loop
+        except Exception:
+            logging.exception("Run failed due to unexpected exception:")
+            finish(False)
 
+            time.sleep(300)  # wait for 5 minutes before trying again
+
+    finish(True)
 
 def run():
     logging.info("=" * 60)
@@ -375,3 +427,9 @@ def run():
 
 
 main()
+if not success:
+    exception_msg = traceback.format_exc()[-2000:]
+    send_discord(False, exception_msg)
+else:
+    send_discord(True)
+
