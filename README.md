@@ -43,9 +43,9 @@ Various scripts I use to maintain my homelab. Sends notifications to Discord
 ![image](https://user-images.githubusercontent.com/31908995/236705386-efe51958-e6e3-474e-8e93-1b2c33bc81de.png)
 
 [snapraid.py](https://github.com/sicXnull/homelab-scripts/blob/main/snapraid/snapraid.py) - fork of [snapraid-runner](https://github.com/Chronial/snapraid-runner) 
-- change `webhook_url` in snapraid-runner.conf. otherwise follow same configuration.  (TO DO: Add Metrics) <br><br>
+- change `webhook_url` in snapraid-runner.conf. otherwise follow same configuration.<br><br>
 
-![image](https://user-images.githubusercontent.com/31908995/224580065-21eb2cae-8067-4849-8446-b513901969b5.png)
+![image](https://github.com/sicXnull/homelab-scripts/assets/31908995/a0dbcf9f-d799-434e-a608-a46e253659cb)
 
 ## Deployment
 
