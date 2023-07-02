@@ -10,6 +10,11 @@ from shutil import copytree, ignore_patterns, make_archive, rmtree, move
 
 webhook_url = 'https://discord.com/api/webhooks/<embed>'
 
+# Read the password from warden.ini file
+config = configparser.ConfigParser()
+config.read('/root/.secrets/warden.ini')
+password = config['Vaultwarden']['password']
+
 class Backup:
     """
     Make a backup of a vaultwarden installation.
@@ -17,7 +22,7 @@ class Backup:
     We create a backups directory, in which we create a staging subdirectory.
     Files are copied into the stage, according to the instructions in
     https://github.com/dani-garcia/vaultwarden/wiki/Backing-up-your-vault.
-    The stage is then archives into a .tar.bz2, and removed.
+    The stage is then archived into a .tar.bz2, and removed.
     """
     def __init__(self,
                  datadir="/path/to/vaultwarden",
@@ -133,17 +138,23 @@ class Backup:
             self.backup_everything_else()
             self.backup_db()
             self.backup_bztar()
+
+            # Encrypt the tar file
+            tar_file = self.backupdir / self.get_backup_filename()
+            encrypted_tar_file = tar_file.with_suffix('.tar.bz2.enc')
+            os.system(f'7z a -p{password} -y {encrypted_tar_file} {tar_file}')
+            os.remove(tar_file)
+
             self.cleanup_staging()
-            backup_file = self.backupdir / self.get_backup_filename()
-            self.send_discord_message(backup_file.name)
+            self.send_discord_message(encrypted_tar_file.name)
         except Exception as e:
             error_output = str(e)
-            self.send_discord_message(None, success=False, error_output=error_output)
+            self.send_discord_message(None, success=False, error_output=error_output)  # Send failure notification
             raise  # Re-raise the exception to show the error message in the console
 
     def expire(self, max_backups=5):
         """ Expire Backups older than the most recent max_backups (default: 5). """
-        backup_files = list(self.backupdir.glob("*.tar.bz2"))
+        backup_files = list(self.backupdir.glob("*.tar.bz2.enc"))
         backup_files.sort(key=lambda p: p.stat().st_ctime, reverse=True)
 
         for idx, p in enumerate(backup_files):
