@@ -37,8 +37,21 @@ Various scripts I use to maintain my homelab. Sends notifications to Discord
 
 ![image](https://user-images.githubusercontent.com/31908995/224580012-31963672-0424-4aa6-89d0-e491540df247.png)
 
-[vaultwarden.py](https://github.com/sicXnull/homelab-scripts/blob/main/vaultwarden.py) - Modified version of an [existing VaultWarden backup script](https://github.com/isotopp/vaultwarden-backup). Added ability to save to samba share and send notifications
-- change `webhook_url` <br><br>
+[vaultwarden.py](https://github.com/sicXnull/homelab-scripts/blob/main/vaultwarden.py) - Modified version of an [existing VaultWarden backup script](https://github.com/isotopp/vaultwarden-backup). Added ability to save to samba share and send notifications. The existing VaultWarden DB is encrypted but still stores sensitive data in cleartext such as email address, password hint and websites. This encrypts the archive to add another layer of protection.
+- change `webhook_url`
+- create `.secrets` folder if it does not already exist `sudo mkdir /root/.secrets`
+- add the following to warden.ini `sudo nano /root/.secrets/warden.ini`
+```
+[Vaultwarden]
+password = YOUR_PASSWORD_HERE
+```
+- Set permissions so only root has access
+```
+sudo chmod 700 /root/.secrets
+sudo chmod 600 /root/.secrets/warden.ini
+sudo chown -R root:root /root/.secrets
+```
+<br>
 
 ![image](https://user-images.githubusercontent.com/31908995/236705386-efe51958-e6e3-474e-8e93-1b2c33bc81de.png)
 
@@ -80,7 +93,6 @@ Add to crontab. Example:
 - Plex update Daily @ 4am
 ```
 0 4 * * * python3 /opt/homelab-scripts/plex-update.py
-
 ```
 
 - certbot renewal every 6 hours
