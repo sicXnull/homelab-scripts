@@ -57,12 +57,23 @@ if result.returncode == 23:
 if result.returncode == 0:
     duration_seconds = time.time() - start_time
     duration_minutes, duration_seconds = divmod(duration_seconds, 60)
+    duration_hours, duration_minutes = divmod(duration_minutes, 60)
     duration_seconds = round(duration_seconds, 0)
 
+    duration_str = ""
+    if duration_hours > 0:
+        duration_str += f"{int(duration_hours)} hour{'s' if duration_hours > 1 else ''} "
+    if duration_minutes > 0:
+        duration_str += f"{int(duration_minutes)} minute{'s' if duration_minutes > 1 else ''} "
+    if duration_seconds > 0:
+        duration_str += f"{int(duration_seconds)} second{'s' if duration_seconds > 1 else ''}"
+
     tz = pytz.timezone("America/New_York")
+    time_ny = datetime.datetime.now(tz).strftime("%I:%M %p %Z")
+    date_ny = datetime.datetime.now(tz).strftime("%Y-%m-%d")
 
     embed = {
-        'title': "hostname",
+        'title': hostname,
         "thumbnail": {
             "url": "https://i.imgur.com/dFqM7CG.png"
         },
@@ -74,7 +85,7 @@ if result.returncode == 0:
             },
             {
                 'name': 'Transfer',
-                'value': "transferred",
+                'value': transferred,
                 'inline': True
             },
             {
@@ -84,11 +95,11 @@ if result.returncode == 0:
             },
             {
                 'name': 'Duration',
-                'value': f'{int(duration_minutes)} minutes {int(duration_seconds)} seconds',
+                'value': duration_str,
             },
             {
                 'name': 'Date and Time',
-                'value': datetime.datetime.now(tz).strftime('%Y-%m-%d %I:%M %p %Z'),
+                'value': f'{date_ny} {time_ny}',
             },
         ],
         'color': 12868102
