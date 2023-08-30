@@ -14,8 +14,11 @@ Various scripts I use to maintain my homelab. Sends notifications to Discord
 
 ![image](https://user-images.githubusercontent.com/31908995/224578518-0e2852ef-0f09-4a41-9a2a-3c7b18a576de.png)
 
-[rsync.py](https://github.com/sicXnull/homelab-scripts/blob/main/rsync.py) - Runs `rsync` command. ignores the various filetypes that cause errors. Sends notification when complete 
+[rsync.py](https://github.com/sicXnull/homelab-scripts/blob/main/rsync/rsync.py) - Runs `rsync` command. ignores the various filetypes that cause errors. Sends notification when complete 
 - change `webhook_url` `source_dirs` `target_dir` & `pytz.timezone` <br><br>
+
+[rsync-ssh.py](https://github.com/sicXnull/homelab-scripts/blob/main/rsync/rsync-ssh.py) - Runs `rsync` command - Syncs to remote machine via SSH ignores the various filetypes that cause errors. Sends notification when complete 
+- change `private_key` `webhook_url` `source_dirs` `target_dir` & `pytz.timezone` <br><br>
 
 ![image](https://user-images.githubusercontent.com/31908995/224581849-abbdb49a-2d03-4f9c-b889-60dc07fdf87e.png)
 
@@ -37,7 +40,10 @@ Various scripts I use to maintain my homelab. Sends notifications to Discord
 
 ![image](https://user-images.githubusercontent.com/31908995/224580012-31963672-0424-4aa6-89d0-e491540df247.png)
 
-[vaultwarden.py](https://github.com/sicXnull/homelab-scripts/blob/main/vaultwarden.py) - Modified version of an [existing VaultWarden backup script](https://github.com/isotopp/vaultwarden-backup). Added ability to save to samba share and send notifications. The existing VaultWarden DB is encrypted but still stores sensitive data in cleartext such as email address, password hint and websites. This encrypts the archive to add another layer of protection.
+[vaultwarden.py](https://github.com/sicXnull/homelab-scripts/blob/main/vaultwarden/vaultwarden.py) - Modified version of an [existing VaultWarden backup script](https://github.com/isotopp/vaultwarden-backup). Added ability to save to samba share and send notifications. The existing VaultWarden DB is encrypted but still stores sensitive data in cleartext such as email address, password hint and websites. This encrypts the archive to add another layer of protection.
+
+[vaultwarden-ssh.py](https://github.com/sicXnull/homelab-scripts/blob/main/vaultwarden/vaultwarden-ssh.py) - Same as above, sends to remote machine via SSH instead. Change `remote_host` , `remote_username`, `remote_path` as well as everything below
+
 - change `webhook_url`
 - create `.secrets` folder if it does not already exist `sudo mkdir /root/.secrets`
 - add the following to warden.ini `sudo nano /root/.secrets/warden.ini`
