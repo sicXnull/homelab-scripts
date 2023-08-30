@@ -50,28 +50,19 @@ else:
 
 print(synced, created, deleted, transferred)
 
-# Handle Error 23 (partial transfer) as success
-if result.returncode == 23:
+# Check for error code 23, 24, and 25 and set returncode to 0 if found
+if result.returncode in [23, 24, 25]:
     result.returncode = 0
 
 if result.returncode == 0:
     duration_seconds = time.time() - start_time
     duration_minutes, duration_seconds = divmod(duration_seconds, 60)
-    duration_hours, duration_minutes = divmod(duration_minutes, 60)
     duration_seconds = round(duration_seconds, 0)
 
-    duration_str = ""
-    if duration_hours > 0:
-        duration_str += f"{int(duration_hours)} hour{'s' if duration_hours > 1 else ''} "
-    if duration_minutes > 0:
-        duration_str += f"{int(duration_minutes)} minute{'s' if duration_minutes > 1 else ''} "
-    if duration_seconds > 0:
-        duration_str += f"{int(duration_seconds)} second{'s' if duration_seconds > 1 else ''}"
 
     tz = pytz.timezone("America/New_York")
-    time_ny = datetime.datetime.now(tz).strftime("%I:%M %p %Z")
-    date_ny = datetime.datetime.now(tz).strftime("%Y-%m-%d")
-
+    time_ny = datetime.now(tz).strftime("%I:%M %p")
+    date_ny = datetime.now(tz).strftime("%m/%d/%y")
     embed = {
         'title': hostname,
         "thumbnail": {
@@ -95,7 +86,7 @@ if result.returncode == 0:
             },
             {
                 'name': 'Duration',
-                'value': duration_str,
+                'value': f'{int(duration_minutes)} minutes {int(duration_seconds)} seconds',
             },
             {
                 'name': 'Date and Time',
@@ -111,8 +102,14 @@ else:
         embed = {
             'title': f'{hostname} rsync failed',
             'description': f'```{error_output}```',
-            'color': 15158332
+            'color': 15158332,
+            'fields': [
+                {
+                    'name': 'Error Code',
+                    'value': result.returncode,
+                    'inline': True
+                }
+            ]
         }
 
-# Send the message to discord
 requests.post(webhook_url, json={'embeds': [embed]})
