@@ -1,9 +1,8 @@
 import os
 import subprocess
-import datetime
+from datetime import datetime, date
 import requests
 from pytz import timezone
-from datetime import datetime, date
 
 # Discord webhook URL
 webhook_url = 'https://discord.com/api/webhooks/<embed>'
@@ -24,7 +23,7 @@ def send_discord_message(filename, success=True, error_output=None):
     }
 
     if success:
-        now = datetime.datetime.now(timezone('US/Eastern')).strftime(
+        now = datetime.now(timezone('US/Eastern')).strftime(
             "%m/%d/%Y %I:%M:%S %p %Z")
         embed_data = {
             "embeds": [{
