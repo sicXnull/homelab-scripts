@@ -34,6 +34,11 @@ Various scripts I use to maintain my homelab. Sends notifications to Discord
 
 ![image](https://user-images.githubusercontent.com/31908995/224579556-099df1b2-1ddc-4d04-82ae-6ae483808d05.png)
 
+[plex-backup.py](https://github.com/sicXnull/homelab-scripts/blob/main/plex-backup.py) - backs up plex db & data
+- change `webhook_url` <br><br>
+- change `backup_dir` <br><br>
+
+![image](https://github.com/sicXnull/homelab-scripts/assets/31908995/bfb3f329-e776-47f2-b56b-685118fb2e2e)
 
 [pfbak.py](https://github.com/sicXnull/homelab-scripts/blob/main/pfsense-backup/pfbak.py) - creates pfSense backup and notified when complete
 - change `.env` file <br><br>
