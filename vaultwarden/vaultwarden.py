@@ -7,6 +7,8 @@ from pytz import timezone
 import sqlite3
 from tqdm import tqdm
 from shutil import copytree, ignore_patterns, make_archive, rmtree, move
+import configparser
+import os
 
 webhook_url = 'https://discord.com/api/webhooks/<embed>'
 
